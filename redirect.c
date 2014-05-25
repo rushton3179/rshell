@@ -26,7 +26,7 @@ void redirect(char ***args, int i){
 	    //STD_IN to the file
 
 		if(strcmp(args[i][0], "<")==0){
-			if(args[i+1][0] == NULL){
+			if(args[i+1] == NULL || args[i+1][0] == NULL){
 				printf("Error: You need an input file.\n");
 				exit(EXIT_FAILURE);
 			}
@@ -41,15 +41,15 @@ void redirect(char ***args, int i){
 	    //STD_OUT to the file
 
 		if(strcmp(args[i][0], ">")==0){
-			if(args[i+1][0] == NULL){
+			if(args[i+1] == NULL || args[i+1][0] == NULL){
 				printf("Error: You need a file to write to.\n");
 				exit(EXIT_FAILURE);
 			}
 			else{
 				int outfile = open(args[i+1][0], O_WRONLY | O_CREAT, S_IRUSR |
 				    S_IWUSR);
-				        dup2(outfile, 1);
-				        redirect(args, i+1);
+				dup2(outfile, 1);
+				redirect(args, i+1);
 			}
 		}
 
@@ -57,15 +57,15 @@ void redirect(char ***args, int i){
 	    //STD_OUT to the file and appends to the end of it
 
 		if(strcmp(args[i][0], ">>")==0){
-			if(args[i+1][0] == NULL){
+			if(args[i+1] == NULL || args[i+1][0] == NULL){
 				printf("Error: You need a file to write to.\n");
 				exit(EXIT_FAILURE);
 			}
 			else{
 				int outfile = open(args[i+1][0], O_APPEND | O_WRONLY | O_CREAT,
 				    S_IRUSR | S_IWUSR);
-				        dup2(outfile, STD_OUT);
-				        redirect(args, i+1);
+				dup2(outfile, STD_OUT);
+				redirect(args, i+1);
 			}
 		}
 

@@ -38,7 +38,7 @@ int main(){
     	while(in[0] != 'q'){
         	char cwd[2*size*sizeof(char)];
         	char *directory;
-	        char *cwdtok = strtok(cwd, "/");
+	        char *cwdtok;
         	int count = 0;
         	char input;
 
@@ -47,6 +47,7 @@ int main(){
 	    	*/
 
 		    getcwd(cwd, sizeof(cwd));
+				cwdtok = strtok(cwd, "/");
 
 	        while(cwdtok != NULL){
 		        directory = cwdtok;
@@ -94,7 +95,7 @@ int main(){
                          strcmp(args[0][0], ">") == 0 ||
                          strcmp(args[0][0], ">>") == 0 ||
                          strcmp(args[0][0], "|") == 0){
-                             printf("Error: \"%s\" cannot be first character\n",
+            				printf("Error: \"%s\" cannot be first character\n",
                                 args[0][0]);
                 }
                 else{
@@ -107,19 +108,9 @@ int main(){
                     if(pid==0){
                         int has_pipe = pipe_find(args, 0);
                             if(has_pipe == 1){
-                                //printf("INPIPE\n");
                                 piper(args, 0, STD_IN);
                             }
                             else if(has_pipe == 0){
-                                /*
-                                This printf is for troubleshooting.
-                                Currently when a single program or program
-                                with >, < or >> is entered this part gets
-                                skipped. I cannot seem to figure out why. It
-                                gets executed without going through redirect
-                                or piper.
-                                */
-                                //printf("IN REDIR\n");
                                 redirect(args, 0);
                             }
                     }
